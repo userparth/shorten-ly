@@ -1,0 +1,26 @@
+{
+	"name": "short-ly",
+	"version": "0.0.1-alpha",
+	"description": "📌 A simple URL shortener library with Express & SQLite",
+	"main": "dist/index.js",
+	"types": "dist/index.d.ts",
+	"scripts": {
+		"build": "tsc",
+		"prepublishOnly": "npm run build",
+		"start": "node dist/index.js"
+	},
+	"dependencies": {
+		"express": "^4.18.2",
+		"nanoid": "^4.0.0",
+		"prisma": "^5.0.0",
+		"sqlite3": "^5.1.6",
+		"dotenv": "^16.0.3"
+	},
+	"devDependencies": {
+		"typescript": "^5.0.0",
+		"@types/node": "^18.15.11",
+		"@types/express": "^4.17.17"
+	},
+	"author": "Parth Sharma",
+	"license": "MIT"
+}
