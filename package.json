@@ -1,5 +1,5 @@
 {
-	"name": "short-ly",
+	"name": "shorten-ly",
 	"version": "0.0.1-alpha",
 	"description": "📌 A simple URL shortener library with Express & SQLite",
 	"main": "src/index.js",
