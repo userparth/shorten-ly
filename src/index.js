@@ -1,55 +1,42 @@
-import express from "express";
 import { PrismaClient } from "@prisma/client";
 import { customAlphabet } from "nanoid";
 
-const app = express();
 const prisma = new PrismaClient();
 const nanoid = customAlphabet(
 	"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
-	8
+	6
 );
 
-app.use(express.json());
+let BASE_URL = "http://localhost:3000"; // Default domain, users can override it
 
-// ✅ Shorten URL
-// npx prisma migrate dev --name init
-app.post("/shorten", async (req, res) => {
-	const { longUrl } = req.body;
-	if (!longUrl) return res.status(400).json({ error: "URL is required" });
+// Function to allow users to set their own domain
+function setBaseURL(url) {
+	BASE_URL = url;
+}
 
+// Function to shorten a URL
+async function shortenURL(longUrl) {
 	const shortCode = nanoid();
 	await prisma.url.create({ data: { shortCode, longUrl, visitCount: 0 } });
+	return `${BASE_URL}/${shortCode}`; // Uses the user-defined domain
+}
 
-	res.json({ shortUrl: `http://localhost:3000/${shortCode}` });
-});
+// Function to retrieve the original URL
+async function getOriginalURL(shortCode) {
+	const urlEntry = await prisma.url.findUnique({ where: { shortCode } });
+	return urlEntry ? urlEntry.longUrl : null;
+}
 
-// ✅ Redirect to Original URL & Track Visits
-app.get("/:shortCode", async (req, res) => {
-	const { shortCode } = req.params;
-	const url = await prisma.url.findUnique({ where: { shortCode } });
+// Function to get analytics (visit count)
+async function getAnalytics(shortCode) {
+	const urlEntry = await prisma.url.findUnique({ where: { shortCode } });
+	return urlEntry ? { visits: urlEntry.visitCount } : null;
+}
 
-	if (!url) return res.status(404).json({ error: "URL not found" });
-
-	await prisma.url.update({
-		where: { shortCode },
-		data: { visitCount: url.visitCount + 1 },
-	});
-
-	res.redirect(url.longUrl);
-});
-
-// ✅ Get URL Analytics
-app.get("/analytics/:shortCode", async (req, res) => {
-	const { shortCode } = req.params;
-	const url = await prisma.url.findUnique({ where: { shortCode } });
-
-	if (!url) return res.status(404).json({ error: "URL not found" });
-
-	res.json({ shortCode, longUrl: url.longUrl, visits: url.visitCount });
-});
-
-// ✅ Start Server
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () =>
-	console.log(`Server running at http://localhost:${PORT}`)
-);
+// Export functions for use as a library
+export const urlShortener = {
+	setBaseURL,
+	shortenURL,
+	getOriginalURL,
+	getAnalytics,
+};
