@@ -1,6 +1,6 @@
 import { urlShortener } from "./src/index.js";
 
-urlShortener.setBaseURL("https://mycustomdomain.com"); // User-defined domain
+urlShortener.setBaseURL("https://mycustomdomain.com");
 
 (async () => {
 	const shortURL = await urlShortener.shortenURL(
