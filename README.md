@@ -14,7 +14,7 @@
 
 ## **📦 Installation**
 
-Install the package using `npm` or `yarn`:
+Install the package using `npm` :
 
 ```sh
 npm install shorten-ly
