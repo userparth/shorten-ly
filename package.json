@@ -6,7 +6,7 @@
 	"type": "module",
 	"scripts": {
 		"start": "node example.js",
-  "dev": "node example.js"
+  "dev": "node index.js"
 	},
 	"dependencies": {
 		"@prisma/client": "^6.5.0",
