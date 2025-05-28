@@ -5,7 +5,8 @@
 	"main": "src/index.js",
 	"type": "module",
 	"scripts": {
-		"start": "node example.js"
+		"start": "node example.js",
+  "dev": "node example.js"
 	},
 	"dependencies": {
 		"@prisma/client": "^6.5.0",
